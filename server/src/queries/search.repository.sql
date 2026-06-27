@@ -8,9 +8,9 @@ from
   inner join "asset_exif" on "asset"."id" = "asset_exif"."assetId"
 where
   "asset"."visibility" = $1
-  and "asset"."fileCreatedAt" >= $2
-  and "asset_exif"."lensModel" = $3
-  and "asset"."ownerId" = any ($4::uuid[])
+  and "asset"."ownerId" = any ($2::uuid[])
+  and "asset"."fileCreatedAt" >= $3
+  and "asset_exif"."lensModel" = $4
   and "asset"."isFavorite" = $5
   and "asset"."deletedAt" is null
 order by
@@ -28,9 +28,9 @@ from
   inner join "asset_exif" on "asset"."id" = "asset_exif"."assetId"
 where
   "asset"."visibility" = $1
-  and "asset"."fileCreatedAt" >= $2
-  and "asset_exif"."lensModel" = $3
-  and "asset"."ownerId" = any ($4::uuid[])
+  and "asset"."ownerId" = any ($2::uuid[])
+  and "asset"."fileCreatedAt" >= $3
+  and "asset_exif"."lensModel" = $4
   and "asset"."isFavorite" = $5
   and "asset"."deletedAt" is null
 
@@ -42,9 +42,9 @@ from
   inner join "asset_exif" on "asset"."id" = "asset_exif"."assetId"
 where
   "asset"."visibility" = $1
-  and "asset"."fileCreatedAt" >= $2
-  and "asset_exif"."lensModel" = $3
-  and "asset"."ownerId" = any ($4::uuid[])
+  and "asset"."ownerId" = any ($2::uuid[])
+  and "asset"."fileCreatedAt" >= $3
+  and "asset_exif"."lensModel" = $4
   and "asset"."isFavorite" = $5
   and "asset"."deletedAt" is null
 order by
@@ -61,9 +61,9 @@ from
   inner join "asset_exif" on "asset"."id" = "asset_exif"."assetId"
 where
   "asset"."visibility" = $1
-  and "asset"."fileCreatedAt" >= $2
-  and "asset_exif"."lensModel" = $3
-  and "asset"."ownerId" = any ($4::uuid[])
+  and "asset"."ownerId" = any ($2::uuid[])
+  and "asset"."fileCreatedAt" >= $3
+  and "asset_exif"."lensModel" = $4
   and "asset"."isFavorite" = $5
   and "asset"."deletedAt" is null
   and "asset_exif"."fileSizeInByte" > $6
@@ -84,9 +84,9 @@ from
   inner join "smart_search" on "asset"."id" = "smart_search"."assetId"
 where
   "asset"."visibility" = $1
-  and "asset"."fileCreatedAt" >= $2
-  and "asset_exif"."lensModel" = $3
-  and "asset"."ownerId" = any ($4::uuid[])
+  and "asset"."ownerId" = any ($2::uuid[])
+  and "asset"."fileCreatedAt" >= $3
+  and "asset_exif"."lensModel" = $4
   and "asset"."isFavorite" = $5
   and "asset"."deletedAt" is null
 order by

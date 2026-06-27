@@ -380,6 +380,27 @@ export function searchAssetBuilder(kysely: Kysely<DB>, options: AssetSearchBuild
     .selectFrom('asset')
     .where('asset.visibility', '=', visibility)
     .$if(!!options.albumIds && options.albumIds.length > 0, (qb) => inAlbums(qb, options.albumIds!))
+    .$if(!!options.userIds, (qb) => {
+      if (options.albumIds && options.albumIds.length > 0) {
+        return qb.where((eb) =>
+          eb(
+            'asset.ownerId',
+            'in',
+            eb
+              .selectFrom('album_user')
+              .select('album_user.userId')
+              .where('album_user.albumId', 'in', (eb) =>
+                eb
+                  .selectFrom('album_user')
+                  .select('album_user.albumId')
+                  .whereRef('album_user.albumId', '=', anyUuid(options.albumIds!))
+                  .where('album_user.userId', '=', options.userIds![0]),
+              ),
+          ),
+        );
+      }
+      return qb.where('asset.ownerId', '=', anyUuid(options.userIds!));
+    })
     .$if(!!options.tagIds && options.tagIds.length > 0, (qb) => hasTags(qb, options.tagIds!))
     .$if(options.tagIds === null, (qb) =>
       qb.where((eb) => eb.not(eb.exists((eb) => eb.selectFrom('tag_asset').whereRef('assetId', '=', 'asset.id')))),
@@ -431,7 +452,6 @@ export function searchAssetBuilder(kysely: Kysely<DB>, options: AssetSearchBuild
     .$if(!!options.checksum, (qb) => qb.where('asset.checksum', '=', options.checksum!))
     .$if(!!options.id, (qb) => qb.where('asset.id', '=', asUuid(options.id!)))
     .$if(!!options.libraryId, (qb) => qb.where('asset.libraryId', '=', asUuid(options.libraryId!)))
-    .$if(!!options.userIds, (qb) => qb.where('asset.ownerId', '=', anyUuid(options.userIds!)))
     .$if(!!options.encodedVideoPath, (qb) =>
       qb
         .innerJoin('asset_file', (join) =>
